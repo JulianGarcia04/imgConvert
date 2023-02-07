@@ -3,7 +3,15 @@
     <nav-bar></nav-bar>
     <form
       v-if="!isOpen"
-      class="flex flex-col items-center justify-around w-11/12 h-[45%] text-2xl lg:w-5/12"
+      class="
+        flex flex-col
+        items-center
+        justify-around
+        w-11/12
+        h-[45%]
+        text-2xl
+        lg:w-5/12
+      "
       @submit="handlerSubmit($event)"
     >
       <div
@@ -12,7 +20,17 @@
         <label
           v-if="!urlImageInput"
           for="image-input"
-          class="flex justify-center items-center border-button border-2 h-52 w-52 rounded-2xl lg:h-56 lg:w-56 cursor-pointer"
+          class="
+            flex
+            justify-center
+            items-center
+            border-button border-2
+            h-52
+            w-52
+            rounded-2xl
+            lg:h-56 lg:w-56
+            cursor-pointer
+          "
         >
           <input
             type="file"
@@ -51,12 +69,14 @@
   </div>
 </template>
 <script setup>
+import { ref, onBeforeMount } from "vue";
+import Swal from "sweetalert2";
+import { uploadImage, getCurrentUser, addUrl } from "../firebase/api";
 import NavBar from "components/NavBar.vue";
 import PreImageCard from "components/PreImageCard.vue";
 import ImageStorage from "./ImageStorage.vue";
-import { ref } from "vue";
-import { event } from "quasar";
 
+const currUser = ref(getCurrentUser());
 const imageInput = ref({});
 const urlImageInput = ref("");
 const isOpen = ref(false);
@@ -75,9 +95,30 @@ const handlerDelete = function () {
   urlImageInput.value = "";
 };
 
-const handlerSubmit = function (e) {
+const handlerSubmit = async function (e) {
   e.preventDefault();
-  if (imageInput.value) {
+  try {
+    const reqUploadImage = await uploadImage(
+      imageInput.value,
+      currUser.value.displayName
+    );
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: reqUploadImage.message,
+      showConfirmButton: false,
+      timer: 1500,
+    }).then(() => {
+      handlerDelete();
+    });
+  } catch (error) {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: error.message,
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 };
 </script>

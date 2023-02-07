@@ -5,11 +5,24 @@
     <h1>imgConvert</h1>
     <div class="flex items-center">
       <div
-        class="flex flex-col items-center justify-center rounded-t-[50%] w-16 h-16"
+        class="
+          flex flex-col
+          items-center
+          justify-center
+          rounded-t-[50%]
+          w-16
+          h-16
+        "
         :class="isOpenMenu && isScreenWidth && `bg-index`"
       >
         <div
-          class="flex justify-center items-center border-white border-2 rounded-[50%]"
+          class="
+            flex
+            justify-center
+            items-center
+            border-white border-2
+            rounded-[50%]
+          "
           @click="handleIsOpenMenu"
         >
           <svg
@@ -41,7 +54,8 @@
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="feather feather-log-out ml-4"
+          class="feather feather-log-out ml-4 cursor-pointer"
+          @click="handleSignOut"
         >
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
           <polyline points="16 17 21 12 16 7"></polyline>
@@ -66,7 +80,8 @@
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="feather feather-log-out ml-4"
+        class="feather feather-log-out ml-4 cursor-pointer"
+        @click="handleSignOut"
       >
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
         <polyline points="16 17 21 12 16 7"></polyline>
@@ -78,27 +93,51 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useQuasar } from "quasar";
+import { useQuasar, Cookies } from "quasar";
+import Swal from "sweetalert2";
 import { getCurrentUser } from "../firebase/api";
+import { SignOut } from "../firebase/api";
 
 const $q = useQuasar();
 const router = useRouter();
 
-const isScreenWidth = $q.screen.width <= 425;
+const isScreenWidth = ref($q.screen.width <= 425);
 
 const isOpenMenu = ref(false);
 
-const currUser = ref({});
+const currUser = ref(getCurrentUser());
 
 onMounted(() => {
-  const isAthenticate = getCurrentUser();
-  if (!isAthenticate) {
+  if (!currUser.value) {
     router.push("/");
   }
-  currUser.value = isAthenticate;
 });
 
 function handleIsOpenMenu() {
   isOpenMenu.value = !isOpenMenu.value;
+}
+
+async function handleSignOut() {
+  try {
+    const request = await SignOut();
+    Cookies.remove("session");
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: request.message,
+      showConfirmButton: false,
+      timer: 1500,
+    }).then(() => {
+      router.push("/");
+    });
+  } catch (error) {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: error.message,
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
 }
 </script>

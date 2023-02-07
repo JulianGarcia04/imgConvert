@@ -18,7 +18,7 @@ const singUp = async ({ username, fullname, email, password }) => {
       displayName: username,
     });
     const dbRequest = await addUser(username, fullname, email);
-    return { message: `Welcome ${username} to imgConvert` };
+    return { message: `Welcome ${username} to imgConvert, please sign In` };
   } catch (error) {
     throw error;
   }

@@ -10,7 +10,15 @@
         </h1>
       </div>
       <form
-        class="flex flex-col items-center justify-around bg-index h-5/6 w-full lg:rounded-lg"
+        class="
+          flex flex-col
+          items-center
+          justify-around
+          bg-index
+          h-5/6
+          w-full
+          lg:rounded-lg
+        "
         @submit="
           isSecondPage
             ? handleSubmitSecondPage($event)
@@ -35,7 +43,16 @@
             required
           ></text-field>
           <button
-            class="flex justify-center items-center w-11/12 bg-button rounded-md h-11 lg:w-10/12"
+            class="
+              flex
+              justify-center
+              items-center
+              w-11/12
+              bg-button
+              rounded-md
+              h-11
+              lg:w-10/12
+            "
           >
             Continue
             <svg
@@ -76,7 +93,16 @@
             required
           ></text-field>
           <button
-            class="flex justify-center items-center w-11/12 bg-button rounded-md h-11 lg:w-10/12"
+            class="
+              flex
+              justify-center
+              items-center
+              w-11/12
+              bg-button
+              rounded-md
+              h-11
+              lg:w-10/12
+            "
           >
             Sign Up
             <svg
@@ -108,9 +134,9 @@
 import Swal from "sweetalert2";
 import { useQuasar } from "quasar";
 import { useRouter, RouterLink } from "vue-router";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import TextField from "../components/TextField.vue";
-import { singUp } from "../firebase/api";
+import { singUp, getCurrentUser } from "../firebase/api";
 
 const router = useRouter();
 const $q = useQuasar();
@@ -122,6 +148,13 @@ const password = ref("");
 
 const isSecondPage = ref(false);
 const isScreen = $q.screen.width <= 425;
+const isSignIn = ref(getCurrentUser());
+
+onMounted(() => {
+  if (isSignIn.value) {
+    router.push("/home");
+  }
+});
 
 async function handleSubmitSecondPage(e) {
   e.preventDefault();
@@ -139,7 +172,7 @@ async function handleSubmitSecondPage(e) {
       showConfirmButton: false,
       timer: 1000,
     }).then((res) => {
-      router.push("/home");
+      router.push("/");
     });
   } catch (error) {
     Swal.fire({

@@ -10,7 +10,15 @@
         </h1>
       </div>
       <form
-        class="flex flex-col items-center justify-around bg-index h-5/6 w-full lg:rounded-lg"
+        class="
+          flex flex-col
+          items-center
+          justify-around
+          bg-index
+          h-5/6
+          w-full
+          lg:rounded-lg
+        "
         @submit="handleSubmit($event)"
       >
         <text-field
@@ -26,7 +34,16 @@
           required
         ></text-field>
         <button
-          class="flex justify-center items-center w-11/12 bg-button rounded-md h-11 lg:w-10/12"
+          class="
+            flex
+            justify-center
+            items-center
+            w-11/12
+            bg-button
+            rounded-md
+            h-11
+            lg:w-10/12
+          "
         >
           Sign In
           <svg
@@ -57,9 +74,9 @@
 <script setup>
 import { useQuasar } from "quasar";
 import { useRouter, RouterLink } from "vue-router";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Swal from "sweetalert2";
-import { singIn } from "../firebase/api";
+import { singIn, getCurrentUser } from "../firebase/api";
 import TextField from "../components/TextField.vue";
 
 const router = useRouter();
@@ -69,6 +86,14 @@ const email = ref("");
 const password = ref("");
 const isScreen = $q.screen.width <= 425;
 
+const isSignIn = ref(getCurrentUser());
+
+onMounted(() => {
+  if (isSignIn.value) {
+    router.push("/home");
+  }
+});
+
 async function handleSubmit(e) {
   e.preventDefault();
   try {
@@ -76,12 +101,13 @@ async function handleSubmit(e) {
       email: email.value,
       password: password.value,
     });
+    stateCurrUser.setCurrUser(request.user);
     Swal.fire({
       position: "center",
       icon: "success",
       title: request.message,
       showConfirmButton: false,
-      timer: 1000,
+      timer: 1500,
     }).then((res) => {
       router.push("/home");
     });
@@ -94,6 +120,5 @@ async function handleSubmit(e) {
       timer: 1500,
     });
   }
-  router.push("/home");
 }
 </script>

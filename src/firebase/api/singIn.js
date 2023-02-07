@@ -10,6 +10,7 @@ const singIn = async ({ email, password }) => {
     });
     return {
       message: `Welcome ${request.user.displayName}`,
+      user: request.user,
     };
   } catch (error) {
     throw { message: "The data is bad" };
