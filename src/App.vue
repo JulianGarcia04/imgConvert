@@ -1,11 +1,7 @@
 <template>
-  <router-view />
+  <div class="bg-main text-white p-0 m-0">
+    <router-view />
+  </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'App'
-})
-</script>
+<script setup></script>
