@@ -65,21 +65,82 @@
       </div>
       <button class="bg-button rounded-lg w-full h-14">Upload</button>
     </form>
-    <image-storage :is-open="isOpen" @open="handlerOpen"></image-storage>
+    <image-storage
+      :is-open="isOpen"
+      :images="images"
+      :is-empty="isEmpty"
+      :username="currUser.displayName"
+      :handle-fetching="handleFetching"
+      @open="handlerOpen"
+    ></image-storage>
   </div>
 </template>
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { ref, onMounted, watch } from "vue";
 import Swal from "sweetalert2";
-import { uploadImage, getCurrentUser, addUrl } from "../firebase/api";
+import {
+  uploadImage,
+  getCurrentUser,
+  addUrl,
+  getAllImages,
+} from "../firebase/api";
 import NavBar from "components/NavBar.vue";
 import PreImageCard from "components/PreImageCard.vue";
 import ImageStorage from "./ImageStorage.vue";
 
 const currUser = ref(getCurrentUser());
+
 const imageInput = ref({});
 const urlImageInput = ref("");
+const isEmptyInput = ref(true);
+
 const isOpen = ref(false);
+
+const isFetching = ref(true);
+const isEmpty = ref(false);
+const images = ref([]);
+
+watch(isFetching, async (newVal, oldVal) => {
+  if (newVal) {
+    try {
+      const request = await getAllImages(currUser.value.uid);
+      isEmpty.value = request.isEmpty;
+      images.value = request.data;
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+    isFetching.value = false;
+  }
+});
+
+onMounted(async () => {
+  if (isFetching.value) {
+    try {
+      const request = await getAllImages(currUser.value.uid);
+      isEmpty.value = request.isEmpty;
+      images.value = request.data;
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+    isFetching.value = false;
+  }
+});
+
+const handleFetching = () => {
+  isFetching.value = !isFetching.value;
+};
 
 const handlerOpen = function () {
   isOpen.value = !isOpen.value;
@@ -87,20 +148,29 @@ const handlerOpen = function () {
 
 const handleImageInput = function (e) {
   imageInput.value = e.target.files[0];
+  isEmptyInput.value = false;
   urlImageInput.value = URL.createObjectURL(e.target.files[0]);
 };
 
 const handlerDelete = function () {
   imageInput.value = {};
+  isEmptyInput.value = true;
   urlImageInput.value = "";
 };
 
+//upload image to server
 const handlerSubmit = async function (e) {
   e.preventDefault();
   try {
     const reqUploadImage = await uploadImage(
       imageInput.value,
-      currUser.value.displayName
+      currUser.value.displayName,
+      isEmptyInput.value
+    );
+    const reqAddUrl = await addUrl(
+      reqUploadImage.url,
+      currUser.value.uid,
+      imageInput.value.name
     );
     Swal.fire({
       position: "center",
@@ -110,6 +180,7 @@ const handlerSubmit = async function (e) {
       timer: 1500,
     }).then(() => {
       handlerDelete();
+      isFetching.value = true;
     });
   } catch (error) {
     Swal.fire({
@@ -119,6 +190,7 @@ const handlerSubmit = async function (e) {
       showConfirmButton: false,
       timer: 1500,
     });
+    console.log(error.error);
   }
 };
 </script>

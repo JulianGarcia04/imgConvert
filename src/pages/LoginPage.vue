@@ -101,7 +101,6 @@ async function handleSubmit(e) {
       email: email.value,
       password: password.value,
     });
-    stateCurrUser.setCurrUser(request.user);
     Swal.fire({
       position: "center",
       icon: "success",

@@ -1,19 +1,24 @@
 import { ref, uploadBytes } from "firebase/storage";
+import getImageUrl from "./getImageUrl";
 import storage from "../storage";
 
-const uploadImage = async (image, username) => {
+const uploadImage = async (image, username, isEmptyInput) => {
   try {
-    if (!image) {
+    if (!image || isEmptyInput) {
       throw { message: "must select a image" };
     }
     const refStorage = ref(storage, `${username}/${image.name}`);
-    const request = await uploadBytes(refStorage, image);
-    console.log(request);
-    if (request.metadata) {
-      return { message: "The image did uploaded correctly" };
+    const reqUpload = await uploadBytes(refStorage, image);
+    const reqGetUrl = await getImageUrl(username, image.name);
+    if (reqGetUrl) {
+      return {
+        message: "The image did uploaded correctly",
+        url: reqGetUrl,
+        metadata: reqUpload.metadata,
+      };
     }
   } catch (error) {
-    throw { message: "error to the upload the image" };
+    throw error;
   }
 };
 

@@ -2,8 +2,19 @@
   <div class="lg:h-56 lg:w-56 h-40 w-40 relative">
     <image-card :src="src" :alt="alt"></image-card>
     <div
-      class="flex justify-center items-center w-12 h-12 bg-button rounded-[50%] absolute right-[-20px] bottom-[-20px]"
-      @click="emit('delete')"
+      class="
+        flex
+        justify-center
+        items-center
+        w-12
+        h-12
+        bg-button
+        rounded-[50%]
+        absolute
+        right-[-20px]
+        bottom-[-20px]
+      "
+      @click="$emit('delete')"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +37,19 @@
       </svg>
     </div>
     <div
-      class="flex justify-center items-center w-12 h-12 bg-button rounded-[50%] absolute left-[-20px] bottom-[-20px]"
-      @click="emit('download')"
+      class="
+        flex
+        justify-center
+        items-center
+        w-12
+        h-12
+        bg-button
+        rounded-[50%]
+        absolute
+        left-[-20px]
+        bottom-[-20px]
+      "
+      @click="$emit('download')"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
