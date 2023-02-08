@@ -7,7 +7,7 @@ const singUp = async ({ username, fullname, email, password }) => {
   try {
     const isExits = await getUser(username);
     if (!isExits) {
-      throw { message: "Este usuario ya exite" };
+      throw { message: "The user exits 🤯" };
     }
     const authRequest = await createUserWithEmailAndPassword(
       auth,
@@ -18,7 +18,7 @@ const singUp = async ({ username, fullname, email, password }) => {
       displayName: username,
     });
     const dbRequest = await addUser(username, fullname, email);
-    return { message: `Welcome ${username} to imgConvert, please sign In` };
+    return { message: `Welcome ${username} to imgConvert, please sign In 😊` };
   } catch (error) {
     throw error;
   }

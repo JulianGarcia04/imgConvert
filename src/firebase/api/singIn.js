@@ -9,11 +9,11 @@ const singIn = async ({ email, password }) => {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 1),
     });
     return {
-      message: `Welcome ${request.user.displayName}`,
+      message: `Welcome ${request.user.displayName} 😀`,
       user: request.user,
     };
   } catch (error) {
-    throw { message: "The data is bad" };
+    throw { message: "The data is bad 🙄" };
   }
 };
 

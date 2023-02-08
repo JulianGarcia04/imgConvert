@@ -13,7 +13,7 @@ const addUrl = async (url, idUser, filename) => {
     });
     return request;
   } catch (error) {
-    throw { message: "error interno, please contact with the team", error };
+    throw { message: "internal error, please contact with the team 👽", error };
   }
 };
 
