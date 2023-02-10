@@ -13,6 +13,10 @@ const routes = [
         component: () => import("pages/RegisterPage.vue"),
       },
       {
+        path: "/remember",
+        component: () => import("pages/rememberPassword.vue"),
+      },
+      {
         path: "/home",
         name: "Home",
         component: () => import("pages/HomePage.vue"),

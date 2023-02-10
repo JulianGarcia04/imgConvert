@@ -170,7 +170,7 @@ async function handleSubmitSecondPage(e) {
       icon: "success",
       title: request.message,
       showConfirmButton: false,
-      timer: 1000,
+      timer: 2500,
     }).then((res) => {
       router.push("/");
     });
@@ -180,7 +180,7 @@ async function handleSubmitSecondPage(e) {
       icon: "error",
       title: error.message,
       showConfirmButton: false,
-      timer: 1500,
+      timer: 2500,
     });
   }
 }

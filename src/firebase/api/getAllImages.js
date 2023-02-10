@@ -8,8 +8,9 @@ const getAllImages = async (uid) => {
     const request = await getDocs(q);
     const images = [];
     request.forEach((imageUrl) => {
+      const id = imageUrl.id;
       const data = imageUrl.data();
-      images.push(data);
+      images.push({ id, ...data });
     });
     return { data: images, isEmpty: request.empty };
   } catch (error) {

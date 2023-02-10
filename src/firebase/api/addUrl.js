@@ -6,7 +6,6 @@ const addUrl = async (url, idUser, filename) => {
   try {
     const id = v4();
     const request = await setDoc(doc(db, "urls", id), {
-      id,
       url,
       idUser,
       filename,

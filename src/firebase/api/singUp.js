@@ -1,14 +1,15 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+  signOut,
+} from "firebase/auth";
 import addUser from "./addUser";
 import getUser from "./getUser";
 import auth from "../auth";
 
 const singUp = async ({ username, fullname, email, password }) => {
   try {
-    const isExits = await getUser(username);
-    if (!isExits) {
-      throw { message: "The user exits 🤯" };
-    }
     const authRequest = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -17,8 +18,14 @@ const singUp = async ({ username, fullname, email, password }) => {
     await updateProfile(authRequest.user, {
       displayName: username,
     });
+    await sendEmailVerification(authRequest.user, {
+      url: "http://192.168.1.3:9000/",
+    });
     const dbRequest = await addUser(username, fullname, email);
-    return { message: `Welcome ${username} to imgConvert, please sign In 😊` };
+    await signOut(auth);
+    return {
+      message: `Welcome ${username} to imgConvert, please check your email verication 😊`,
+    };
   } catch (error) {
     throw error;
   }

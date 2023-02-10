@@ -10,3 +10,6 @@ export { default as getImageUrl } from "./getImageUrl";
 export { default as getAllImages } from "./getAllImages";
 export { default as deleteImage } from "./deleteImage";
 export { default as deleteUrl } from "./deleteUrl";
+export { default as signInWithGoogle } from "./signInWithGoogle";
+export { default as signInWithFacebook } from "./signInWithFacebook";
+export { default as resetPassword } from "./resetPassword";

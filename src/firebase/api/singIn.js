@@ -1,10 +1,16 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Cookies } from "quasar";
 import auth from "../auth";
 
 const singIn = async ({ email, password }) => {
   try {
     const request = await signInWithEmailAndPassword(auth, email, password);
+    const isVerified = request.user.emailVerified;
+
+    if (!isVerified) {
+      await signOut(auth);
+      throw { message: "Your email isn't verified 🥸" };
+    }
     Cookies.set("session", request.user, {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 1),
     });
@@ -13,7 +19,7 @@ const singIn = async ({ email, password }) => {
       user: request.user,
     };
   } catch (error) {
-    throw { message: "The data is bad 🙄" };
+    throw error;
   }
 };
 

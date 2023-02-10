@@ -13,6 +13,7 @@
         absolute
         right-[-20px]
         bottom-[-20px]
+        cursor-pointer
       "
       @click="$emit('delete')"
     >
@@ -48,6 +49,7 @@
         absolute
         left-[-20px]
         bottom-[-20px]
+        cursor-pointer
       "
       @click="$emit('download')"
     >

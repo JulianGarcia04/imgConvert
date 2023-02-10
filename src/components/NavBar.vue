@@ -91,7 +91,7 @@
   </header>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import { useQuasar, Cookies } from "quasar";
 import Swal from "sweetalert2";
@@ -107,7 +107,7 @@ const isOpenMenu = ref(false);
 
 const currUser = ref(getCurrentUser());
 
-onMounted(() => {
+onBeforeMount(() => {
   if (!currUser.value) {
     router.push("/");
   }

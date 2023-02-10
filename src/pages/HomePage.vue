@@ -112,7 +112,7 @@ watch(isFetching, async (newVal, oldVal) => {
         icon: "error",
         title: error.message,
         showConfirmButton: false,
-        timer: 1500,
+        timer: 3000,
       });
     }
     isFetching.value = false;
@@ -120,7 +120,7 @@ watch(isFetching, async (newVal, oldVal) => {
 });
 
 onMounted(async () => {
-  if (isFetching.value) {
+  if (isFetching.value && currUser.value) {
     try {
       const request = await getAllImages(currUser.value.uid);
       isEmpty.value = request.isEmpty;
@@ -131,7 +131,7 @@ onMounted(async () => {
         icon: "error",
         title: error.message,
         showConfirmButton: false,
-        timer: 1500,
+        timer: 3000,
       });
     }
     isFetching.value = false;
@@ -147,6 +147,17 @@ const handlerOpen = function () {
 };
 
 const handleImageInput = function (e) {
+  const type = e.target.files[0].type;
+  if (!type.startsWith("image")) {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "The file must an image 🤨",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+    return;
+  }
   imageInput.value = e.target.files[0];
   isEmptyInput.value = false;
   urlImageInput.value = URL.createObjectURL(e.target.files[0]);
@@ -177,7 +188,7 @@ const handlerSubmit = async function (e) {
       icon: "success",
       title: reqUploadImage.message,
       showConfirmButton: false,
-      timer: 1500,
+      timer: 3000,
     }).then(() => {
       handlerDelete();
       isFetching.value = true;
@@ -188,9 +199,8 @@ const handlerSubmit = async function (e) {
       icon: "error",
       title: error.message,
       showConfirmButton: false,
-      timer: 1500,
+      timer: 3000,
     });
-    console.log(error.error);
   }
 };
 </script>

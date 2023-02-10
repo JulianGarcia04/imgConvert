@@ -2,7 +2,19 @@
   <div class="lg:h-56 lg:w-56 h-52 w-52 relative">
     <image-card :src="src" :alt="alt"></image-card>
     <div
-      class="flex justify-center items-center w-12 h-12 bg-button rounded-[50%] absolute right-[-20px] bottom-[-20px]"
+      class="
+        flex
+        justify-center
+        items-center
+        w-12
+        h-12
+        bg-button
+        rounded-[50%]
+        absolute
+        right-[-20px]
+        bottom-[-20px]
+        cursor-pointer
+      "
       @click="$emit('delete')"
     >
       <svg
