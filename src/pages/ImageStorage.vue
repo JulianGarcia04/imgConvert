@@ -1,6 +1,6 @@
 <template>
   <section
-    :class="isOpen ? `h-[90%]` : `h-[45%]`"
+    :class="isOpen ? `h-[90%]` : `h-[50%]`"
     class="
       flex flex-col
       items-center
@@ -31,6 +31,36 @@
         <polyline points="5 12 12 5 19 12"></polyline>
       </svg>
     </header>
+    <header v-else class="flex justify-center items-center w-11/12 h-[10%] p-4">
+      <button
+        class="
+          flex
+          justify-center
+          items-center
+          rounded-[50%]
+          bg-button
+          border-none
+        "
+        :class="isOpen ? `w-14 h-14 rotate-180` : `w-11 h-11`"
+        @click="$emit('open')"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-arrow-up"
+        >
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
+    </header>
     <section
       class="
         flex
@@ -38,7 +68,7 @@
         flex-wrap
         gap-6
         w-11/12
-        h-[90%]
+        h-[80%]
         overflow-y-scroll
       "
       :class="!isScreenWidth && `pt-6`"
@@ -60,39 +90,15 @@
         @download="handleDownload(image.url, image.filename)"
       ></post-image-card>
     </section>
-    <footer
-      v-if="!isScreenWidth"
-      class="flex justify-center items-center w-11/12 h-[10%]"
-    >
-      <button
-        class="
-          flex
-          justify-center
-          items-center
-          rounded-[50%]
-          bg-button
-          border-none
-        "
-        :class="isOpen ? `w-14 h-14` : `w-11 h-11`"
-        @click="$emit('open')"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="feather feather-arrow-up"
-        >
-          <line x1="12" y1="19" x2="12" y2="5"></line>
-          <polyline points="5 12 12 5 19 12"></polyline>
-        </svg>
-      </button>
-    </footer>
+    <!-- <footer class="flex justify-center w-11/12 h-[10%]">
+      <q-pagination
+        v-model="currentPage"
+        color="#2b4bf4"
+        :max="10"
+        :max-pages="6"
+        boundary-numbers
+      />
+    </footer> -->
   </section>
 </template>
 <script setup>
@@ -106,6 +112,8 @@ import PostImageCard from "../components/PostImageCard.vue";
 const $q = useQuasar();
 
 const isScreenWidth = ref($q.screen.width <= 425);
+
+const currentPage = ref(6);
 
 defineEmits(["open"]);
 

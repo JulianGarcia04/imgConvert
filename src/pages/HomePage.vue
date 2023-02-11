@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-row justify-center w-full h-screen">
-    <nav-bar></nav-bar>
+    <suspense>
+      <nav-bar></nav-bar>
+
+      <template #fallback> <q-skeleton class="w-11/12 h-16" square /></template>
+    </suspense>
     <form
       v-if="!isOpen"
       class="
@@ -8,7 +12,7 @@
         items-center
         justify-around
         w-11/12
-        h-[45%]
+        h-[40%]
         text-2xl
         lg:w-5/12
       "
@@ -100,15 +104,15 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, defineAsyncComponent, Suspense } from "vue";
 import Swal from "sweetalert2";
 import { v4 } from "uuid";
 import { uploadImages } from "src/firebase/storage/api";
 import { addUrls, getAllImages } from "src/firebase/db/api";
 import { getCurrentUser } from "src/firebase/auth/api";
-import NavBar from "components/NavBar.vue";
 import PreImageCard from "components/PreImageCard.vue";
 import ImageStorage from "./ImageStorage.vue";
+const NavBar = defineAsyncComponent(() => import("components/NavBar.vue"));
 
 const currUser = ref(getCurrentUser());
 
