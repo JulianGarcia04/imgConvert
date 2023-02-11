@@ -44,10 +44,17 @@
       :class="!isScreenWidth && `pt-6`"
     >
       <h1 v-if="isEmpty">No tienes images guardadas</h1>
+      <q-skeleton
+        v-else-if="isLoading"
+        v-for="i in 5"
+        :key="i"
+        class="lg:h-56 lg:w-56 h-40 w-40 rounded-2xl"
+        square
+      />
       <post-image-card
         v-else
         v-for="image in images"
-        :key="image.idUser"
+        :key="image.id"
         :src="image.url"
         @delete="handleDelete(image.id, username, image.filename)"
         @download="handleDownload(image.url, image.filename)"
@@ -89,11 +96,12 @@
   </section>
 </template>
 <script setup>
+import Swal from "sweetalert2";
 import { ref } from "vue";
 import { useQuasar } from "quasar";
-import Swal from "sweetalert2";
+import { deleteImage } from "src/firebase/storage/api";
+import { deleteUrl } from "src/firebase/db/api";
 import PostImageCard from "../components/PostImageCard.vue";
-import { deleteImage, deleteUrl } from "../firebase/api";
 
 const $q = useQuasar();
 
@@ -107,6 +115,7 @@ const props = defineProps([
   "images",
   "username",
   "handleFetching",
+  "isLoading",
 ]);
 
 const handleDelete = async function (id, username, filename) {

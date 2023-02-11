@@ -4,7 +4,7 @@ import {
   getAdditionalUserInfo,
 } from "firebase/auth";
 import { Cookies } from "quasar";
-import auth from "../auth";
+import auth from "..";
 
 const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();

@@ -1,5 +1,5 @@
 import { collection, addDoc } from "firebase/firestore";
-import db from "../db";
+import db from "..";
 
 const addUser = async (username, fullname, email) => {
   try {

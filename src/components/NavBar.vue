@@ -95,8 +95,7 @@ import { ref, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import { useQuasar, Cookies } from "quasar";
 import Swal from "sweetalert2";
-import { getCurrentUser } from "../firebase/api";
-import { SignOut } from "../firebase/api";
+import { SignOut, getCurrentUser } from "src/firebase/auth/api";
 
 const $q = useQuasar();
 const router = useRouter();

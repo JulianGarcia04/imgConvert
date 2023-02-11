@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Cookies } from "quasar";
-import auth from "../auth";
+import auth from "..";
 
 const singIn = async ({ email, password }) => {
   try {

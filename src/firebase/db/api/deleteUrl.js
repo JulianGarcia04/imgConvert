@@ -1,5 +1,5 @@
 import { doc, deleteDoc } from "firebase/firestore";
-import db from "../db";
+import db from "..";
 
 const deleteUrl = async (id) => {
   try {

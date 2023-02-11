@@ -1,5 +1,5 @@
 import { ref, deleteObject } from "firebase/storage";
-import storage from "../storage";
+import storage from "..";
 
 const deleteImage = async (username, filename) => {
   try {

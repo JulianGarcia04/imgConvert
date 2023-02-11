@@ -136,7 +136,7 @@ import { useQuasar } from "quasar";
 import { useRouter, RouterLink } from "vue-router";
 import { ref, onMounted } from "vue";
 import TextField from "../components/TextField.vue";
-import { singUp, getCurrentUser } from "../firebase/api";
+import { singUp, getCurrentUser } from "src/firebase/auth/api";
 
 const router = useRouter();
 const $q = useQuasar();

@@ -1,6 +1,6 @@
 import { signInWithPopup, FacebookAuthProvider } from "firebase/auth";
 import { Cookies } from "quasar";
-import auth from "../auth";
+import auth from "..";
 
 const signInWithFacebook = async () => {
   const provider = new FacebookAuthProvider();

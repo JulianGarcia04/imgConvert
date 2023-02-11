@@ -1,5 +1,5 @@
 import { getDocs, query, where, collection } from "firebase/firestore";
-import db from "../db";
+import db from "..";
 
 const getAllImages = async (uid) => {
   try {

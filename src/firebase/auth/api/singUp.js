@@ -4,9 +4,8 @@ import {
   sendEmailVerification,
   signOut,
 } from "firebase/auth";
-import addUser from "./addUser";
-import getUser from "./getUser";
-import auth from "../auth";
+import { addUser } from "src/firebase/db/api";
+import auth from "..";
 
 const singUp = async ({ username, fullname, email, password }) => {
   try {

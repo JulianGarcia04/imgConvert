@@ -141,7 +141,7 @@
 
 <script setup>
 import { useQuasar } from "quasar";
-import { useRouter, RouterLink } from "vue-router";
+import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import Swal from "sweetalert2";
 import {
@@ -149,7 +149,7 @@ import {
   getCurrentUser,
   signInWithGoogle,
   signInWithFacebook,
-} from "../firebase/api";
+} from "src/firebase/auth/api";
 import TextField from "../components/TextField.vue";
 
 const router = useRouter();

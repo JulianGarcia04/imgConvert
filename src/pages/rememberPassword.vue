@@ -66,7 +66,7 @@ import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import Swal from "sweetalert2";
-import { resetPassword } from "../firebase/api";
+import { resetPassword } from "src/firebase/auth/api";
 import TextField from "components/TextField.vue";
 
 const $q = useQuasar();
