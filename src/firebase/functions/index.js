@@ -1,37 +1,56 @@
+const gm = require("gm").subClass({ imageMagick: true });
 const functions = require("firebase-functions");
+// const { Storage } = require("@google-cloud/storage");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
-const spawn = require("child_process").spawnSync;
+// const { convert } = require("imagemagick-convert");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
 
-exports.image_resize = functions.storage.object().onFinalize((object) => {
-  const fileName = path.basename(object.name);
+// const storage = new Storage();
 
-  const tempFilePath = path.join(os.tmpdir(), fileName);
-  const bucket = admin.storage().bucket(object.bucket);
-  const metadata = {
-    contentType: "image/png",
-  };
-  spawn("convert", [tempFilePath, "-thumbnail", "1280x720>", tempFilePath]);
-  functions.logger.log("Thumbnail created at", tempFilePath);
-  const thumbFileName = `thumb_${object.name}`;
-  const thumbFilePath = path.join(path.dirname(object.name), thumbFileName);
-  // Uploading the thumbnail.
-  bucket.upload(tempFilePath, {
-    destination: thumbFilePath,
-    metadata: metadata,
+exports.image_resize = functions.storage
+  .object()
+  .onFinalize(async (object, ctx) => {
+    const fileName = path.basename(object.name);
+    const name = fileName.split(".")[0];
+    const bucket = admin.storage().bucket(object.bucket);
+    const file = bucket.file(object.name);
+    // const filePath = `gs://${object.bucket}/${object.name}`;
+    const tempFilePath = path.join(os.tmpdir(), fileName);
+    const metadata = {
+      contentType: "image/png",
+    };
+    // Download process
+    try {
+      await file.download({ destination: tempFilePath });
+    } catch (error) {
+      throw new Error(`File download failed: ${error}`);
+    }
+    // convert image process
+    try {
+      gm(tempFilePath)
+        .resize(1280, 720)
+        .write(tempFilePath, (err) => {
+          if (!err) {
+            functions.logger.log("Thumbnail created at", tempFilePath);
+            return;
+          }
+        });
+
+      await bucket.upload(tempFilePath, {
+        destination: path.join(path.dirname(file.name), `${name}.png`),
+        metadata: metadata,
+      });
+
+      return fs.unlinkSync(tempFilePath);
+    } catch (error) {
+      throw new Error(`File transform failed: ${error}`);
+    }
+    // Uploading the thumbnail.
   });
-  // Once the thumbnail has been uploaded delete the local file to free up disk space.
-  return fs.unlinkSync(tempFilePath);
-});
-
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
-});
