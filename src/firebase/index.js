@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDa_AHGMtxlY4oNckFTrjLxVxhhbRyd4MA",
+  apiKey: "AIzaSyD9ZRJTpySAMMNp-v-JoMpBf-lFDhuQemA",
   authDomain: "menupproject.firebaseapp.com",
   projectId: "menupproject",
   storageBucket: "menupproject.appspot.com",
